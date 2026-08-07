@@ -1,0 +1,15 @@
+apiVersion: cloud.google.com/v1
+kind: ComputeClass
+metadata:
+  name: faulty-spot-class
+spec:
+  nodePoolAutoCreation:
+    enabled: true  # Remediation: Enable NAP nodePoolAutoCreation so GKE can provision new node pools
+  priorities:
+  - machineFamily: m2
+    spot: true  # Remediation: Keep m2 spot as the high priority choice
+  - machineFamily: n2
+    spot: true  # Remediation: Add fallback machineFamily n2 compatible with us-east4-a/b/c
+  - machineFamily: e2
+    spot: true  # Remediation: Add fallback machineFamily e2 as a cost-effective safety floor
+  whenUnsatisfiable: DoNotScaleUp
