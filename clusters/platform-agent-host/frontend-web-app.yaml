@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    scenario: 04-missing-zone-fallback
+  name: frontend-web-app
+  namespace: stockout-scenarios
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: frontend-web-app
+  template:
+    metadata:
+      labels:
+        app: frontend-web-app
+        scenario: 04-missing-zone-fallback
+    spec:
+      affinity:
+        nodeAffinity:
+          # Remediation: Relax hard zone scheduling constraint to avoid zonal stockouts
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east4-c
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east4-a
+                - us-east4-b
+      containers:
+      - image: registry.k8s.io/pause:3.9
+        name: web
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "2"
+            memory: 4Gi
+      nodeSelector:
+        cloud.google.com/compute-class: frontend-pinned-class

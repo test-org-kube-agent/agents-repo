@@ -1,0 +1,13 @@
+apiVersion: cloud.google.com/v1
+kind: ComputeClass
+metadata:
+  name: gpu-class
+spec:
+  nodePoolAutoCreation:
+    enabled: true
+  priorities:
+  - machineFamily: g2
+  # Remediation: Add a lower-priority On-Demand priority rule / fallback options to act as a safety floor.
+  # We can also have on-demand fallback or different zones, but g2 spot is highly available in other zones or as on-demand.
+  # Note: Specifying just "gpu-class" enables Autopilot to request nvidia-l4 GPUs.
+  whenUnsatisfiable: DoNotScaleUp

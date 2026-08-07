@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    scenario: 01-gpu-regional-scarcity
+  name: llm-inference-service
+  namespace: stockout-scenarios
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: llm-inference-service
+  template:
+    metadata:
+      labels:
+        app: llm-inference-service
+        scenario: 01-gpu-regional-scarcity
+    spec:
+      containers:
+      - image: registry.k8s.io/pause:3.9
+        name: vllm
+        resources:
+          limits:
+            cpu: "8"
+            memory: 32Gi
+            nvidia.com/gpu: "2"
+          requests:
+            cpu: "8"
+            memory: 32Gi
+            nvidia.com/gpu: "2"
+      nodeSelector:
+        cloud.google.com/compute-class: gpu-class
+      # Remediation: Relax hard zone constraint 'us-east4-b' and allow fallback to 'us-east4-a' and 'us-east4-c'
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east4-b
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east4-a
+                - us-east4-c
