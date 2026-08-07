@@ -1,0 +1,13 @@
+apiVersion: cloud.google.com/v1
+kind: ComputeClass
+metadata:
+  name: frontend-pinned-class
+spec:
+  nodePoolAutoCreation:
+    enabled: true
+  priorities:
+  - machineFamily: m2
+  # Remediation: Add fallback machine families and multi-zone support to prevent zonal stockout
+  - machineFamily: c3
+  - machineFamily: n4
+  whenUnsatisfiable: DoNotScaleUp
