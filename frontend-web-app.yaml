@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-web-app
+  namespace: stockout-scenarios
+  labels:
+    scenario: 04-missing-zone-fallback
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: frontend-web-app
+  template:
+    metadata:
+      labels:
+        app: frontend-web-app
+        scenario: 04-missing-zone-fallback
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east4-c
+                - us-east4-a  # Remediation: Add us-east4-a as zone fallback since m2 family is only in a and b
+                - us-east4-b  # Remediation: Add us-east4-b as zone fallback since m2 family is only in a and b
+      containers:
+      - image: registry.k8s.io/pause:3.9
+        name: web
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "2"
+            memory: 4Gi
+      nodeSelector:
+        cloud.google.com/compute-class: frontend-pinned-class
