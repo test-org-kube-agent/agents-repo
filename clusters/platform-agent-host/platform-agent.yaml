@@ -1,0 +1,53 @@
+apiVersion: kubeagents.x-k8s.io/v1alpha1
+kind: PlatformAgent
+metadata:
+  name: platform-agent
+  namespace: kubeagents-system
+spec:
+  deployment:
+    availability:
+      replicas: 1
+    image: us-east4-docker.pkg.dev/ss-stockout/kube-agents/platform-agent
+    imagePullPolicy: Always
+    tag: latest
+  harness:
+    clusterName: platform-agent-host
+    hermes:
+      agentHome: /opt/data
+      apiServerSecretRef:
+        key: API_SERVER_KEY
+        name: platform-agent-secrets
+      dashboardEnabled: true
+      pluginsDebug: false
+    location: us-east4
+    memory:
+      memoryEnabled: false
+      provider: multiuser_memory
+      userProfileEnabled: false
+    projectId: ss-stockout
+  integration:
+    github:
+      gitRepo: test-org-kube-agent/agents-repo
+      org: test-org-kube-agent
+    googleChat:
+      allowedUsers:
+      - ""
+      enabled: true
+      mode: default
+      projectId: ss-stockout
+      subscriptionName: platform-agent-chat-events-sub
+      topicName: platform-agent-chat-events
+    slack:
+      allowedUsers:
+      - ""
+      appTokenSecretRef:
+        key: SLACK_APP_TOKEN
+        name: platform-agent-secrets
+      botTokenSecretRef:
+        key: SLACK_BOT_TOKEN
+        name: platform-agent-secrets
+      enabled: false
+  security:
+    serviceAccountAnnotations:
+      iam.gke.io/gcp-service-account: kubeagents-platform-gsa@ss-stockout.iam.gserviceaccount.com
+    serviceAccountName: kubeagents-platform-agent
