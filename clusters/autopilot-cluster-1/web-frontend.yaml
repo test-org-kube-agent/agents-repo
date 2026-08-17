@@ -1,0 +1,36 @@
+apiVersion: cloud.google.com/v1
+kind: ComputeClass
+metadata:
+  name: resilient-compute
+spec:
+  nodePoolAutoCreation:
+    enabled: true
+  priorities:
+    - machineFamily: c3
+    - machineFamily: n4
+    - machineFamily: n2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-frontend
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-frontend
+  template:
+    metadata:
+      labels:
+        app: web-frontend
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: resilient-compute
+      containers:
+        - name: web
+          image: nginx:latest
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
