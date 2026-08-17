@@ -3,9 +3,19 @@ kind: ComputeClass
 metadata:
   name: resilient-compute
 spec:
+  nodePoolAutoCreation:
+    enabled: true  # Remediation: Enable node pool auto-creation
   priorities:
-    - machineFamily: c3
+    - machineFamily: c3  # Remediation: Primary high-performance family
       spot: true
+    - machineFamily: n4  # Remediation: Fallback family for capacity diversity
+      spot: true
+    - machineFamily: n2  # Remediation: Fallback family for legacy capacity fallback
+      spot: true
+    - machineFamily: c3  # Remediation: On-Demand fallback priority as guaranteed capacity floor
+      spot: false
+  whenUnsatisfiable: ScaleUpAnyway  # Remediation: Change to ScaleUpAnyway to fall back automatically
+
 ---
 apiVersion: apps/v1
 kind: Deployment
