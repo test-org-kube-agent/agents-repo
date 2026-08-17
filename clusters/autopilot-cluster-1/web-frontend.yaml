@@ -3,12 +3,9 @@ kind: ComputeClass
 metadata:
   name: resilient-compute
 spec:
-  nodePoolAutoCreation:
-    enabled: true
   priorities:
     - machineFamily: c3
-    - machineFamily: n4
-    - machineFamily: n2
+      spot: true
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -28,9 +25,9 @@ spec:
       nodeSelector:
         cloud.google.com/compute-class: resilient-compute
       containers:
-        - name: web
-          image: nginx:latest
+        - name: nginx
+          image: nginx:1.25
           resources:
             requests:
               cpu: "500m"
-              memory: "1Gi"
+              memory: "512Mi"
