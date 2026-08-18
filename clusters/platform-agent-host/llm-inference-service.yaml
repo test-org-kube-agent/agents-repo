@@ -31,6 +31,7 @@ spec:
       nodeSelector:
         cloud.google.com/compute-class: gpu-class
       # Remediation: Relax hard zone constraint 'us-east4-b' and allow fallback to 'us-east4-a' and 'us-east4-c'
+      # Remediation: Also allow scheduling generally to any of the region's zones if 'us-east4-b' is stocked out
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -48,4 +49,13 @@ spec:
                 operator: In
                 values:
                 - us-east4-a
+                - us-east4-c
+          - weight: 25
+            preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east4-a
+                - us-east4-b
                 - us-east4-c
