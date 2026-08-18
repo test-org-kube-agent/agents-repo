@@ -8,6 +8,10 @@ spec:
   priorities:
     - machineFamily: m2
       spot: true
+    - machineFamily: c3  # Remediation: fallback family c3 to prevent m2 stockout Pending state
+      spot: true
+    - machineFamily: n4  # Remediation: fallback family n4 to prevent m2 stockout Pending state
+      spot: true
   whenUnsatisfiable: DoNotScaleUp
 ---
 apiVersion: apps/v1
