@@ -3,9 +3,12 @@ kind: ComputeClass
 metadata:
   name: resilient-compute
 spec:
+  nodePoolAutoCreation:
+    enabled: true
   priorities:
-    - machineFamily: c3
+    - machineFamily: m2
       spot: true
+  whenUnsatisfiable: DoNotScaleUp
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -13,7 +16,7 @@ metadata:
   name: web-frontend
   namespace: default
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: web-frontend
@@ -29,5 +32,5 @@ spec:
           image: nginx:1.25
           resources:
             requests:
-              cpu: "500m"
-              memory: "512Mi"
+              cpu: "1"
+              memory: "1Gi"
