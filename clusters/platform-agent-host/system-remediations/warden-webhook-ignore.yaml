@@ -1,0 +1,7 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: warden-mutating.config.common-webhooks.networking.gke.io
+webhooks:
+- name: warden-mutating.common-webhooks.networking.gke.io
+  failurePolicy: Ignore
