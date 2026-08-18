@@ -1,0 +1,17 @@
+apiVersion: cloud.google.com/v1
+kind: ComputeClass
+metadata:
+  name: payment-processing-class
+spec:
+  nodePoolAutoCreation:
+    enabled: true  # Remediation: Enable nodePoolAutoCreation so GKE can provision nodes
+  priorities:
+  - machineFamily: c3
+    spot: true  # Remediation: Keep c3 spot as highest priority choice
+  - machineFamily: n4
+    spot: true  # Remediation: Add fallback machineFamily n4 Spot
+  - machineFamily: n2
+    spot: true  # Remediation: Add fallback machineFamily n2 Spot
+  - machineFamily: c3
+    # Remediation: Add On-Demand c3 fallback floor to act as capacity safety floor
+  whenUnsatisfiable: DoNotScaleUp
