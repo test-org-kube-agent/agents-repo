@@ -8,6 +8,11 @@ spec:
   priorities:
     - machineFamily: m2
       spot: true
+    - machineFamily: c3
+      spot: true
+    - machineFamily: n4
+      spot: true
+    - machineFamily: c3
   whenUnsatisfiable: DoNotScaleUp
 ---
 apiVersion: apps/v1
