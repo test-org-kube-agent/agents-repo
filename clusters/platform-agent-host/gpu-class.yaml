@@ -7,6 +7,10 @@ spec:
     enabled: true
   priorities:
   - machineFamily: g2
+    provisioningModel: SPOT
+  # Remediation: Add a lower-priority On-Demand priority rule / fallback options to act as a safety floor.
+  - machineFamily: g2
+    provisioningModel: ON_DEMAND
   # Remediation: Add a lower-priority On-Demand priority rule / fallback options to act as a safety floor.
   # We can also have on-demand fallback or different zones, but g2 spot is highly available in other zones or as on-demand.
   # Note: Specifying just "gpu-class" enables Autopilot to request nvidia-l4 GPUs.
