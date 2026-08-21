@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: transactional-db-primary
+  namespace: stockout-scenarios
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: transactional-db-primary
+  template:
+    metadata:
+      labels:
+        app: transactional-db-primary
+    spec:
+      containers:
+      - image: registry.k8s.io/pause:3.9
+        name: db
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      nodeSelector:
+        cloud.google.com/compute-class: db-hyperdisk-class
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: hyperdisk-balanced
+      resources:
+        requests:
+          storage: 10Gi
