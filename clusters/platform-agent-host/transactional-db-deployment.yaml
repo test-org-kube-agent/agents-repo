@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transactional-db
+  namespace: stockout-scenarios
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: transactional-db
+  template:
+    metadata:
+      labels:
+        app: transactional-db
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: db-compute-class
+      containers:
+      - name: container
+        image: "postgres:13"
+        env:
+        - name: POSTGRES_PASSWORD
+          value: "password"
+        resources:
+          requests:
+            cpu: "4"
+            memory: "16Gi"
