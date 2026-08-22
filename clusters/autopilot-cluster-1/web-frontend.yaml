@@ -8,7 +8,7 @@ spec:
   priorities:
     - machineFamily: m2
       spot: true
-  whenUnsatisfiable: DoNotScaleUp
+  whenUnsatisfiable: ScaleUp
 ---
 apiVersion: apps/v1
 kind: Deployment
