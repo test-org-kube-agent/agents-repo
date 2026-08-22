@@ -10,4 +10,4 @@ spec:
   # Remediation: Add fallback machine families and multi-zone support to prevent zonal stockout
   - machineFamily: c3
   - machineFamily: n4
-  whenUnsatisfiable: DoNotScaleUp
+  whenUnsatisfiable: ScaleUp

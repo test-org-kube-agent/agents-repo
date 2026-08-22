@@ -12,4 +12,4 @@ spec:
     spot: true  # Remediation: Add fallback machineFamily n2 compatible with us-east4-a/b/c
   - machineFamily: e2
     spot: true  # Remediation: Add fallback machineFamily e2 as a cost-effective safety floor
-  whenUnsatisfiable: DoNotScaleUp
+  whenUnsatisfiable: ScaleUp
