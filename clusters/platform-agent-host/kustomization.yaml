@@ -1,0 +1,8 @@
+resources:
+- ../default-deny-all.yaml
+- faulty-payment-service.yaml
+- faulty-spot-class.yaml
+- frontend-pinned-class.yaml
+- frontend-web-app.yaml
+- gpu-class.yaml
+- llm-inference-service.yaml
