@@ -1,0 +1,1 @@
+This repository contains a script to delete the `baseline-tenant-policy` network policy from the GKE clusters. This policy is overly permissive and poses a security risk. To delete the policy, run the following command: `python3 delete_policy.py`
